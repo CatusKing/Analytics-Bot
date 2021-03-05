@@ -6,6 +6,8 @@ const config = require('./general/config.json');
 const client = new Discord.Client();
 var total_minutes = data.total_minutes;
 
+//Started Tracking on 3/4/2021
+
 client.once('ready', () => {
   console.log(`Logged in as ${client.user.tag}`);
   function check() {

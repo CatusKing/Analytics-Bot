@@ -57,6 +57,46 @@ client.once('ready', () => {
     }
   }
   setInterval(check, 60000 * config.check_interval);
+  client.api.applications(client.user.id).commands.post({
+    data: {
+      name: "messages",
+      description: "Shows how many messages either Thomas or Joanna has sent",
+      // possible options here e.g. options: [{...}]
+    }
+  });
+  client.api.applications(client.user.id).commands.post({
+    data: {
+      name: "vc",
+      description: "Shows how many hours and minutues Thomas and Joanna have spent together",
+      // possible options here e.g. options: [{...}]
+    }
+  });
+  client.ws.on('INTERACTION_CREATE', async interaction => {
+    const command = interaction.data.name.toLowerCase();
+    const args = interaction.data.options;
+
+    if (command === 'messages') { 
+      // here you could do anything. in this sample
+      // i reply with an api interaction
+      client.api.interactions(interaction.id, interaction.token).callback.post({
+        data: {
+          type: 4,
+          data: {
+            content: `Joanna has sent ${joannaMsg} messages and Thomas has sent ${thomasMsg} messages\n*Data collection was started on 3/4/2021*`
+          }
+        }
+      })
+    } else if (command == 'vc') {
+      client.api.interactions(interaction.id, interaction.token).callback.post({
+        data: {
+          type: 4,
+          data: {
+            content: `Joanna and Thomas have spent ${hours} hours and ${minutes} minutes together in vc\n*Data collection was started on 3/4/2021*`
+          }
+        }
+      })
+    }
+  });
 });
 
 client.on('message', msg => {

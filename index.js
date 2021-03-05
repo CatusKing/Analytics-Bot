@@ -2,15 +2,16 @@ const Discord = require('discord.js');
 const fs = require('fs');
 const token = require('./general/token.json');
 const data = require('./general/data.json');
+const config = require('./general/config.json');
 const client = new Discord.Client();
 var total_minutes = data.total_minutes;
 
 client.once('ready', () => {
   console.log(`Logged in as ${client.user.tag}`);
   function check() {
-    const channel = client.guilds.cache.get('787210175442190356').channels.cache.get('787210175442190363');
+    const channel = client.guilds.cache.get(config.guild_id).channels.cache.get(config.channel_id);
     if (channel.members.has('576154421579481090') && channel.members.has('473110112844644372')) {
-      let tempTotalMinutes = total_minutes + 5;
+      let tempTotalMinutes = total_minutes + config.interval;
       let tempHours = Math.floor(tempTotalMinutes / 60);
       let tempMinutes = tempTotalMinutes % 60;
       var tempData = {
@@ -24,7 +25,7 @@ client.once('ready', () => {
       client.user.setActivity(`${tempHours} hours and ${tempMinutes} minutes`);
     }
   }
-  setInterval(check, 300000);
+  setInterval(check, 60000 * config.interval);
 });
 
 client.login(token.discord);

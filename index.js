@@ -18,13 +18,17 @@ client.once('ready', () => {
   console.log(`Logged in as ${client.user.tag}`);
   function status() {
     if (cycle == 1) {
-
+      cycle = 2;
+      client.user.setActivity(`${joannaMsg} messages from Joanna`);
     } else if (cycle == 2) {
-
+      cycle = 3;
+      client.user.setActivity(`${thomasMsg} messages from Thomas`);
     } else if (cycle == 3) {
-
+      cycle = 1;
+      client.user.setActivity(`${hours} hours and ${minutes} minutes`);
     }
   }
+  status();
   setInterval(status, 60000 * config.status_interval)
   function check() {
     for(let i = 0; i < config.guild_id.length; ++i) {

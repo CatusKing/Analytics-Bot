@@ -11,5 +11,6 @@
     "811488620677955599",
     "805295748648140865"
   ],
-  "interval": 1
+  "check_interval": 1,
+  "status_interval": 5
 }

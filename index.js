@@ -21,7 +21,7 @@ client.once('ready', () => {
       let json = JSON.stringify(tempData);
       total_minutes = tempTotalMinutes;
       fs.writeFileSync('general/data.json', json);
-      client.user.setActivity(`Hours: ${tempHours}`);
+      client.user.setActivity(`${tempHours} hours and ${tempMinutes} minutes`);
     }
   }
   setInterval(check, 300000);

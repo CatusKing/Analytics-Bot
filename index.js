@@ -139,6 +139,8 @@ client.on('message', msg => {
     message += `statusCycle: ${statusCycle}`;
     message += `commandRateLimit: ${commandRateLimit}`
     message += `uptime: ${uptime()}`
+    msg.channel.send(message);
+    return;
   }
   //Joanna
   if (msg.author.id == '576154421579481090') {

@@ -88,8 +88,6 @@ client.once('ready', () => {
 
     function send(msg) {
       if (commandRateLimit <= 0) return;
-      let joannaMsgRounded = (Math.floor(joannaMsg / 100)) * 100;
-      let thomasMsgRounded = (Math.floor(thomasMsg / 100)) * 100;
       client.api.interactions(interaction.id, interaction.token).callback.post({
         data: {
           type: 4,
@@ -102,6 +100,8 @@ client.once('ready', () => {
     }
     switch (command) {
       case 'messages':
+        let joannaMsgRounded = (Math.floor(joannaMsg / 100)) * 100;
+        let thomasMsgRounded = (Math.floor(thomasMsg / 100)) * 100;
         send(`Joanna has sent ${joannaMsgRounded} messages and Thomas has sent ${thomasMsgRounded} messages\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`);
         break;
       case 'vc':

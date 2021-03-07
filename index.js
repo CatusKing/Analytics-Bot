@@ -4,7 +4,7 @@ const token = require('./general/token.json');
 const data = require('./general/data.json');
 const config = require('./general/config.json');
 const dataMsg = require('./general/messages.json');
-const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants');
+const { uptime } = require('process');
 const client = new Discord.Client();
 var total_minutes = data.total_minutes;
 var hours = data.hours;
@@ -129,6 +129,17 @@ client.once('ready', () => {
 });
 
 client.on('message', msg => {
+  if (msg.channel.type == 'dm' && msg.author.id == '473110112844644372' && msg.content.toLowerCase().includes('!debug')) {
+    let message = '';
+    message += `total_minutes: ${total_minutes}\n`;
+    message += `hours: ${hours}\n`;
+    message += `minutes: ${minutes}\n`;
+    message += `thomasMsg: ${thomasMsg}`;
+    message += `joannaMsg: ${joannaMsg}`;
+    message += `statusCycle: ${statusCycle}`;
+    message += `commandRateLimit: ${commandRateLimit}`
+    message += `uptime: ${uptime()}`
+  }
   //Joanna
   if (msg.author.id == '576154421579481090') {
     let tempJoannaMsg = joannaMsg + 1;

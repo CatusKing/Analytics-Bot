@@ -21,6 +21,7 @@ client.once('ready', () => {
   function rateLimit() {
     if (commandRateLimit < config.command_max_rate_limit) commandRateLimit += 1;
   }
+  rateLimit();
   setInterval(rateLimit, 1000 * config.command_cooldown);
   function status() {
     if (statusCycle == 1) {

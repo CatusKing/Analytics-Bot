@@ -87,29 +87,30 @@ client.once('ready', () => {
     const command = interaction.data.name.toLowerCase();
     const args = interaction.data.options;
 
-    function send(msg) {
-      if (commandRateLimit <= 0) return;
-      client.api.interactions(interaction.id, interaction.token).callback.post({
-        data: {
-          type: 4,
+    function send(command, msg) {
+      if (commandRateLimit > 0 || command == 'tos') {
+        client.api.interactions(interaction.id, interaction.token).callback.post({
           data: {
-            content: msg
+            type: 4,
+            data: {
+              content: msg
+            }
           }
-        }
-      })
-      commandRateLimit -= 1;
+        })
+        if (command != 'tos') commandRateLimit -= 1;
+      }
     }
     switch (command) {
       case 'messages':
         let joannaMsgRounded = (Math.floor(joannaMsg / 100)) * 100;
         let thomasMsgRounded = (Math.floor(thomasMsg / 100)) * 100;
-        send(`Joanna has sent ${joannaMsgRounded} messages and Thomas has sent ${thomasMsgRounded} messages\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`);
+        send('messages', `Joanna has sent ${joannaMsgRounded} messages and Thomas has sent ${thomasMsgRounded} messages\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`);
         break;
       case 'vc':
-        send(`Joanna and Thomas have spent ${hours} hours together in vc\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`);
+        send('vc',`Joanna and Thomas have spent ${hours} hours together in vc\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`);
         break;
       case 'tos':
-        send(`Hi so privacy is a thing so we are asking that\n1. You do not use the bot in a way that will get you information about us that isn't already publically avalible.\n2. You dont use the information provided in any way other than observation.\n3. We ask that you don't use this information in a stalker way. ie trying to figure out what we are doing by spamming the command.\n**If you are found breaking the TOS or abusing the bot you will be banned from the servers that contain the bot.**`);
+        send('tos',`Hi so privacy is a thing so we are asking that\n1. You do not use the bot in a way that will get you information about us that isn't already publically avalible.\n2. You dont use the information provided in any way other than observation.\n3. We ask that you don't use this information in a stalker way. ie trying to figure out what we are doing by spamming the command.\n**If you are found breaking the TOS or abusing the bot you will be banned from the servers that contain the bot.**`);
         break;
     }
   });

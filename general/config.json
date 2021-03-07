@@ -12,5 +12,7 @@
     "805295748648140865"
   ],
   "check_interval": 1,
-  "status_interval": 5
+  "status_interval": 10,
+  "command_cooldown": 600,
+  "command_max_rate_limit": 5
 }

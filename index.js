@@ -4,27 +4,33 @@ const token = require('./general/token.json');
 const data = require('./general/data.json');
 const config = require('./general/config.json');
 const dataMsg = require('./general/messages.json');
+const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants');
 const client = new Discord.Client();
 var total_minutes = data.total_minutes;
 var hours = data.hours;
 var minutes = data.minutes;
 var thomasMsg = dataMsg.thomas;
 var joannaMsg = dataMsg.joanna;
-var cycle = 1;
+var statusCycle = 1;
+var commandRateLimit = 0;
 
 //Started Tracking on 3/4/2021
 
 client.once('ready', () => {
   console.log(`Logged in as ${client.user.tag}`);
+  function rateLimit() {
+    if (commandRateLimit < config.command_max_rate_limit) commandRateLimit += 1;
+  }
+  setInterval(rateLimit, 1000 * config.command_cooldown);
   function status() {
-    if (cycle == 1) {
-      cycle = 2;
+    if (statusCycle == 1) {
+      statusCycle = 2;
       client.user.setActivity(`${joannaMsg} messages from Joanna`);
-    } else if (cycle == 2) {
-      cycle = 3;
+    } else if (statusCycle == 2) {
+      statusCycle = 3;
       client.user.setActivity(`${thomasMsg} messages from Thomas`);
-    } else if (cycle == 3) {
-      cycle = 1;
+    } else if (statusCycle == 3) {
+      statusCycle = 1;
       client.user.setActivity(`${hours} hours and ${minutes} minutes`);
     }
   }
@@ -68,33 +74,42 @@ client.once('ready', () => {
     data: {
       name: "vc",
       description: "Shows how many hours and minutues Thomas and Joanna have spent together",
-      // possible options here e.g. options: [{...}]
     }
   });
+  client.api.applications(client.user.id).commands.post({
+    data: {
+      name: "tos",
+      description: "Sends the current TOS",
+    }
+  })
   client.ws.on('INTERACTION_CREATE', async interaction => {
     const command = interaction.data.name.toLowerCase();
     const args = interaction.data.options;
 
-    if (command === 'messages') { 
-      // here you could do anything. in this sample
-      // i reply with an api interaction
+    function send(msg) {
+      if (commandRateLimit <= 0) return;
+      let joannaMsgRounded = (Math.floor(joannaMsg / 100)) * 100;
+      let thomasMsgRounded = (Math.floor(thomasMsg / 100)) * 100;
       client.api.interactions(interaction.id, interaction.token).callback.post({
         data: {
           type: 4,
           data: {
-            content: `Joanna has sent ${joannaMsg} messages and Thomas has sent ${thomasMsg} messages\n*Data collection was started on 3/4/2021*`
+            content: msg
           }
         }
       })
-    } else if (command == 'vc') {
-      client.api.interactions(interaction.id, interaction.token).callback.post({
-        data: {
-          type: 4,
-          data: {
-            content: `Joanna and Thomas have spent ${hours} hours and ${minutes} minutes together in vc\n*Data collection was started on 3/4/2021*`
-          }
-        }
-      })
+      commandRateLimit -= 1;
+    }
+    switch (command) {
+      case 'messages':
+        send(`Joanna has sent ${joannaMsgRounded} messages and Thomas has sent ${thomasMsgRounded} messages\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`);
+        break;
+      case 'vc':
+        send(`Joanna and Thomas have spent ${hours} hours together in vc\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`);
+        break;
+      case 'tos':
+        send(`Hi so privacy is a thing so we are asking that\n1. You do not use the bot in a way that will get you information about us that isn't already publically avalible.\n2. You dont use the information provided in any way other than observation.\n3. We ask that you don't use this information in a stalker way. ie trying to figure out what we are doing by spamming the command.\n**If you are found breaking the TOS or abusing the bot you will be banned from the servers that contain the bot.**`);
+        break;
     }
   });
 });

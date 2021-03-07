@@ -134,11 +134,11 @@ client.on('message', msg => {
     message += `total_minutes: ${total_minutes}\n`;
     message += `hours: ${hours}\n`;
     message += `minutes: ${minutes}\n`;
-    message += `thomasMsg: ${thomasMsg}`;
-    message += `joannaMsg: ${joannaMsg}`;
-    message += `statusCycle: ${statusCycle}`;
-    message += `commandRateLimit: ${commandRateLimit}`
-    message += `uptime: ${uptime()}`
+    message += `thomasMsg: ${thomasMsg}\n`;
+    message += `joannaMsg: ${joannaMsg}\n`;
+    message += `statusCycle: ${statusCycle}\n`;
+    message += `commandRateLimit: ${commandRateLimit}\n`
+    message += `uptime: ${uptime()}\n`
     msg.channel.send(message);
     return;
   }

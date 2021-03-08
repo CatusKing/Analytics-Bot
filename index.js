@@ -89,7 +89,6 @@ client.once('ready', () => {
     const command = interaction.data.name.toLowerCase();
     let banned = false;
     let admin = false;
-    console.log(1)
     const member = new Discord.GuildMember(client, interaction.member, client.guilds.cache.get(interaction.guild_id));
     for(let i = 0; i < config.banlist.length; ++i) {
       if (member.id == config.banlist[i]) {
@@ -97,7 +96,6 @@ client.once('ready', () => {
         return banned = true;
       }
     }
-    console.log(2)
     if (!banned) {
       for(let i = 0; i < config.admins.length; ++i) {
         if (member.id == config.admins[i]) return admin = true;
@@ -106,7 +104,6 @@ client.once('ready', () => {
 
     switch (command) {
       case 'messages':
-        console.log(3)
         if (admin) {
           client.api.interactions(interaction.id, interaction.token).callback.post({
             data: {
@@ -116,10 +113,8 @@ client.once('ready', () => {
               }
             }
           });
-          console.log(4)
           break;
         }
-        console.log(5)
         if (commandRateLimit <= 0 || banned) break;
         let joannaMsgRounded = (Math.floor(joannaMsg / 100)) * 100;
         let thomasMsgRounded = (Math.floor(thomasMsg / 100)) * 100;
@@ -131,7 +126,6 @@ client.once('ready', () => {
             }
           }
         });
-        console.log(6)
         commandRateLimit -= 1;
         break;
       case 'vc':

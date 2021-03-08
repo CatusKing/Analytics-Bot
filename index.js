@@ -167,7 +167,7 @@ client.once('ready', () => {
 });
 
 client.on('message', msg => {
-  if (msg.channel.type == 'dm' && msg.author.id == '473110112844644372' && msg.content == '!debug') {
+  if (msg.channel.type == 'dm' && (msg.author.id == '473110112844644372' || msg.author.id == '576154421579481090') && msg.content == '!debug') {
     let message = '';
     message += `total_minutes: ${total_minutes}\n`;
     message += `hours: ${hours}\n`;

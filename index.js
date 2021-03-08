@@ -105,17 +105,17 @@ client.once('ready', () => {
     */
     switch (command) {
       case 'messages':
-        if (admin) {
-          client.api.interactions(interaction.id, interaction.token).callback.post({
-            data: {
-              type: 4,
-              data: {
-                content: `Joanna has sent ${joannaMsg} messages and Thomas has sent ${thomasMsg} messages\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`
-              }
-            }
-          });
-          break;
-        }
+        // if (admin) {
+        //   client.api.interactions(interaction.id, interaction.token).callback.post({
+        //     data: {
+        //       type: 4,
+        //       data: {
+        //         content: `Joanna has sent ${joannaMsg} messages and Thomas has sent ${thomasMsg} messages\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`
+        //       }
+        //     }
+        //   });
+        //   break;
+        // }
         if (commandRateLimit <= 0 || banned) break;
         let joannaMsgRounded = (Math.floor(joannaMsg / 100)) * 100;
         let thomasMsgRounded = (Math.floor(thomasMsg / 100)) * 100;
@@ -130,17 +130,17 @@ client.once('ready', () => {
         commandRateLimit -= 1;
         break;
       case 'vc':
-        if (admin) {
-          client.api.interactions(interaction.id, interaction.token).callback.post({
-            data: {
-              type: 4,
-              data: {
-                content: `Joanna and Thomas have spent ${hours} hours and ${minutes} minutes together in vc\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`
-              }
-            }
-          });
-          break;
-        }
+        // if (admin) {
+        //   client.api.interactions(interaction.id, interaction.token).callback.post({
+        //     data: {
+        //       type: 4,
+        //       data: {
+        //         content: `Joanna and Thomas have spent ${hours} hours and ${minutes} minutes together in vc\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`
+        //       }
+        //     }
+        //   });
+        //   break;
+        // }
         if (commandRateLimit <= 0 || banned) break;
         client.api.interactions(interaction.id, interaction.token).callback.post({
           data: {

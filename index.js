@@ -90,17 +90,17 @@ client.once('ready', () => {
     let banned = false;
     let admin = false;
     const member = new Discord.GuildMember(client, interaction.member, client.guilds.cache.get(interaction.guild_id));
-    for(let i = 0; i < config.banlist.length; ++i) {
-      if (member.id == config.banlist[i]) {
-        console.log(`${member.user.tag} just tried to run a command was denied due to an id ban`);
-        return banned = true;
-      }
-    }
-    if (!banned) {
-      for(let i = 0; i < config.admins.length; ++i) {
-        if (member.id == config.admins[i]) return admin = true;
-      }
-    }
+    // for(let i = 0; i < config.banlist.length; ++i) {
+    //   if (member.id == config.banlist[i]) {
+    //     console.log(`${member.user.tag} just tried to run a command was denied due to an id ban`);
+    //     return banned = true;
+    //   }
+    // }
+    // if (!banned) {
+    //   for(let i = 0; i < config.admins.length; ++i) {
+    //     if (member.id == config.admins[i]) return admin = true;
+    //   }
+    // }
 
     switch (command) {
       case 'messages':

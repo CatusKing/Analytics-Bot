@@ -89,13 +89,13 @@ client.once('ready', () => {
     const command = interaction.data.name.toLowerCase();
     let banned = false;
     let admin = false;
-    const member = new Discord.GuildMember(client, interaction.member, client.guilds.cache.get(interaction.guild_id));
-    for(let i = 0; i < config.banlist.length; ++i) {
-      if (member.id == config.banlist[i]) {
-        console.log(`${member.user.tag} just tried to run a command was denied due to an id ban`);
-        return banned = true;
-      }
-    }
+    // const member = new Discord.GuildMember(client, interaction.member, client.guilds.cache.get(interaction.guild_id));
+    // for(let i = 0; i < config.banlist.length; ++i) {
+    //   if (member.id == config.banlist[i]) {
+    //     console.log(`${member.user.tag} just tried to run a command was denied due to an id ban`);
+    //     return banned = true;
+    //   }
+    // }
     /*
     if (!banned) {
       for(let i = 0; i < config.admins.length; ++i) {

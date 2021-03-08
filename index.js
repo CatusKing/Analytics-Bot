@@ -86,9 +86,11 @@ client.once('ready', () => {
     }
   });
   client.ws.on('INTERACTION_CREATE', async interaction => {
+    console.log('m')
     const command = interaction.data.name.toLowerCase();
     let banned = false;
     let admin = false;
+    console.log('m')
     const member = new Discord.GuildMember(client, interaction.member, client.guilds.cache.get(interaction.guild_id));
     for(let i = 0; i < config.banlist.length; ++i) {
       if (member.id == config.banlist[i]) {
@@ -96,14 +98,17 @@ client.once('ready', () => {
         banned = true;
       }
     }
+    console.log('m')
     if (!banned) {
       for(let i = 0; i < config.admins.length; ++i) {
         if (member.id == config.admins[i]) admin = true;
       }
     }
+    console.log('m')
 
     switch (command) {
       case 'messages':
+        console.log('m')
         if (admin) {
           client.api.interactions(interaction.id, interaction.token).callback.post({
             data: {
@@ -115,7 +120,9 @@ client.once('ready', () => {
           });
           break;
         }
+        console.log('m')
         if (commandRateLimit <= 0 || banned) break;
+        console.log('m')
         let joannaMsgRounded = (Math.floor(joannaMsg / 100)) * 100;
         let thomasMsgRounded = (Math.floor(thomasMsg / 100)) * 100;
         client.api.interactions(interaction.id, interaction.token).callback.post({
@@ -126,6 +133,7 @@ client.once('ready', () => {
             }
           }
         });
+        console.log('m')
         commandRateLimit -= 1;
         break;
       case 'vc':

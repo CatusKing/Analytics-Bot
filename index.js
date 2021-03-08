@@ -89,33 +89,37 @@ client.once('ready', () => {
     const command = interaction.data.name.toLowerCase();
     let banned = false;
     let admin = false;
-    // const member = new Discord.GuildMember(client, interaction.member, client.guilds.cache.get(interaction.guild_id));
-    // for(let i = 0; i < config.banlist.length; ++i) {
-    //   if (member.id == config.banlist[i]) {
-    //     console.log(`${member.user.tag} just tried to run a command was denied due to an id ban`);
-    //     return banned = true;
-    //   }
-    // }
-    /*
+    console.log(1)
+    const member = new Discord.GuildMember(client, interaction.member, client.guilds.cache.get(interaction.guild_id));
+    for(let i = 0; i < config.banlist.length; ++i) {
+      if (member.id == config.banlist[i]) {
+        console.log(`${member.user.tag} just tried to run a command was denied due to an id ban`);
+        return banned = true;
+      }
+    }
+    console.log(2)
     if (!banned) {
       for(let i = 0; i < config.admins.length; ++i) {
         if (member.id == config.admins[i]) return admin = true;
       }
     }
-    */
+
     switch (command) {
       case 'messages':
-        // if (admin) {
-        //   client.api.interactions(interaction.id, interaction.token).callback.post({
-        //     data: {
-        //       type: 4,
-        //       data: {
-        //         content: `Joanna has sent ${joannaMsg} messages and Thomas has sent ${thomasMsg} messages\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`
-        //       }
-        //     }
-        //   });
-        //   break;
-        // }
+        console.log(3)
+        if (admin) {
+          client.api.interactions(interaction.id, interaction.token).callback.post({
+            data: {
+              type: 4,
+              data: {
+                content: `Joanna has sent ${joannaMsg} messages and Thomas has sent ${thomasMsg} messages\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`
+              }
+            }
+          });
+          console.log(4)
+          break;
+        }
+        console.log(5)
         if (commandRateLimit <= 0 || banned) break;
         let joannaMsgRounded = (Math.floor(joannaMsg / 100)) * 100;
         let thomasMsgRounded = (Math.floor(thomasMsg / 100)) * 100;
@@ -127,20 +131,21 @@ client.once('ready', () => {
             }
           }
         });
+        console.log(6)
         commandRateLimit -= 1;
         break;
       case 'vc':
-        // if (admin) {
-        //   client.api.interactions(interaction.id, interaction.token).callback.post({
-        //     data: {
-        //       type: 4,
-        //       data: {
-        //         content: `Joanna and Thomas have spent ${hours} hours and ${minutes} minutes together in vc\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`
-        //       }
-        //     }
-        //   });
-        //   break;
-        // }
+        if (admin) {
+          client.api.interactions(interaction.id, interaction.token).callback.post({
+            data: {
+              type: 4,
+              data: {
+                content: `Joanna and Thomas have spent ${hours} hours and ${minutes} minutes together in vc\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`
+              }
+            }
+          });
+          break;
+        }
         if (commandRateLimit <= 0 || banned) break;
         client.api.interactions(interaction.id, interaction.token).callback.post({
           data: {

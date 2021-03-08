@@ -93,12 +93,12 @@ client.once('ready', () => {
     for(let i = 0; i < config.banlist.length; ++i) {
       if (member.id == config.banlist[i]) {
         console.log(`${member.user.tag} just tried to run a command was denied due to an id ban`);
-        return banned = true;
+        banned = true;
       }
     }
     if (!banned) {
       for(let i = 0; i < config.admins.length; ++i) {
-        if (member.id == config.admins[i]) return admin = true;
+        if (member.id == config.admins[i]) admin = true;
       }
     }
 

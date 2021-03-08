@@ -24,15 +24,17 @@ client.once('ready', () => {
   rateLimit();
   setInterval(rateLimit, 1000 * config.command_cooldown);
   function status() {
+    let joannaMsgRounded = (Math.floor(joannaMsg / 100)) * 100;
+    let thomasMsgRounded = (Math.floor(thomasMsg / 100)) * 100;
     if (statusCycle == 1) {
       statusCycle = 2;
-      client.user.setActivity(`${joannaMsg} messages from Joanna`);
+      client.user.setActivity(`${joannaMsgRounded} messages from Joanna`);
     } else if (statusCycle == 2) {
       statusCycle = 3;
-      client.user.setActivity(`${thomasMsg} messages from Thomas`);
+      client.user.setActivity(`${thomasMsgRounded} messages from Thomas`);
     } else if (statusCycle == 3) {
       statusCycle = 1;
-      client.user.setActivity(`${hours} hours and ${minutes} minutes`);
+      client.user.setActivity(`${hours} hours in vc`);
     }
   }
   status();
@@ -87,6 +89,7 @@ client.once('ready', () => {
     const command = interaction.data.name.toLowerCase();
     const args = interaction.data.options;
     let banned = false;
+    let admin = false;
     const member = new Discord.GuildMember(client, interaction.member, client.guilds.cache.get(interaction.guild_id));
     for(let i = 0; i < config.banlist.length; ++i) {
       if (member.id == config.banlist[i]) {
@@ -94,9 +97,25 @@ client.once('ready', () => {
         return banned = true;
       }
     }
+    if (!banned) {
+      for(let i = 0; i < config.admins.length; ++i) {
+        if (member.id == config.admins[i]) return admin = true;
+      }
+    }
 
     switch (command) {
       case 'messages':
+        if (admin) {
+          client.api.interactions(interaction.id, interaction.token).callback.post({
+            data: {
+              type: 4,
+              data: {
+                content: `Joanna has sent ${joannaMsg} messages and Thomas has sent ${thomasMsg} messages\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`
+              }
+            }
+          });
+          break;
+        }
         if (commandRateLimit <= 0 || banned) break;
         let joannaMsgRounded = (Math.floor(joannaMsg / 100)) * 100;
         let thomasMsgRounded = (Math.floor(thomasMsg / 100)) * 100;
@@ -107,10 +126,21 @@ client.once('ready', () => {
               content: `Joanna has sent ${joannaMsgRounded} messages and Thomas has sent ${thomasMsgRounded} messages\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`
             }
           }
-        })
+        });
         commandRateLimit -= 1;
         break;
       case 'vc':
+        if (admin) {
+          client.api.interactions(interaction.id, interaction.token).callback.post({
+            data: {
+              type: 4,
+              data: {
+                content: `Joanna and Thomas have spent ${hours} hours and ${minutes} minutes together in vc\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`
+              }
+            }
+          });
+          break;
+        }
         if (commandRateLimit <= 0 || banned) break;
         client.api.interactions(interaction.id, interaction.token).callback.post({
           data: {
@@ -119,7 +149,7 @@ client.once('ready', () => {
               content: `Joanna and Thomas have spent ${hours} hours together in vc\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`
             }
           }
-        })
+        });
         commandRateLimit -= 1;
         break;
       case 'tos':
@@ -130,7 +160,7 @@ client.once('ready', () => {
               content: `Hi so privacy is a thing so we are asking that\n1. You do not use the bot in a way that will get you information about us that isn't already publically avalible.\n2. You dont use the information provided in any way other than observation.\n3. We ask that you don't use this information in a stalker way. ie trying to figure out what we are doing by spamming the command.\n**If you are found breaking the TOS or abusing the bot you will be banned from using the bot.**`
             }
           }
-        })
+        });
         break;
     }
   });

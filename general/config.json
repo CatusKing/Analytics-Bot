@@ -15,5 +15,6 @@
   "status_interval": 10,
   "command_cooldown": 300,
   "command_max_rate_limit": 5,
-  "banlist": []
+  "banlist": [],
+  "admins": []
 }

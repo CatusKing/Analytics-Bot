@@ -86,10 +86,14 @@ client.once('ready', () => {
   client.ws.on('INTERACTION_CREATE', async interaction => {
     const command = interaction.data.name.toLowerCase();
     const args = interaction.data.options;
+    let banned = false;
+    for(let i = 0; i < config.banlist.length; ++i) {
+      if (interaction.member.id == config.banlist[i]) return banned = true;
+    }
 
     switch (command) {
       case 'messages':
-        if (commandRateLimit <= 0) break;
+        if (commandRateLimit <= 0 || banned) break;
         let joannaMsgRounded = (Math.floor(joannaMsg / 100)) * 100;
         let thomasMsgRounded = (Math.floor(thomasMsg / 100)) * 100;
         client.api.interactions(interaction.id, interaction.token).callback.post({
@@ -103,7 +107,7 @@ client.once('ready', () => {
         commandRateLimit -= 1;
         break;
       case 'vc':
-        if (commandRateLimit <= 0) break;
+        if (commandRateLimit <= 0 || banned) break;
         client.api.interactions(interaction.id, interaction.token).callback.post({
           data: {
             type: 4,
@@ -119,7 +123,7 @@ client.once('ready', () => {
           data: {
             type: 4,
             data: {
-              content: `Hi so privacy is a thing so we are asking that\n1. You do not use the bot in a way that will get you information about us that isn't already publically avalible.\n2. You dont use the information provided in any way other than observation.\n3. We ask that you don't use this information in a stalker way. ie trying to figure out what we are doing by spamming the command.\n**If you are found breaking the TOS or abusing the bot you will be banned from the servers that contain the bot.**`
+              content: `Hi so privacy is a thing so we are asking that\n1. You do not use the bot in a way that will get you information about us that isn't already publically avalible.\n2. You dont use the information provided in any way other than observation.\n3. We ask that you don't use this information in a stalker way. ie trying to figure out what we are doing by spamming the command.\n**If you are found breaking the TOS or abusing the bot you will be banned from using the bot.**`
             }
           }
         })

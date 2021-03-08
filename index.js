@@ -88,7 +88,8 @@ client.once('ready', () => {
     const args = interaction.data.options;
     let banned = false;
     for(let i = 0; i < config.banlist.length; ++i) {
-      if (interaction.member.id == config.banlist[i]) return banned = true;
+      const member = new Discord.GuildMember(client, interaction.member, client.guilds.cache.get(interaction.guild_id));
+      if (member.id == config.banlist[i]) return banned = true;
     }
 
     switch (command) {

@@ -87,7 +87,6 @@ client.once('ready', () => {
   });
   client.ws.on('INTERACTION_CREATE', async interaction => {
     const command = interaction.data.name.toLowerCase();
-    const args = interaction.data.options;
     let banned = false;
     let admin = false;
     const member = new Discord.GuildMember(client, interaction.member, client.guilds.cache.get(interaction.guild_id));
@@ -97,12 +96,13 @@ client.once('ready', () => {
         return banned = true;
       }
     }
+    /*
     if (!banned) {
       for(let i = 0; i < config.admins.length; ++i) {
         if (member.id == config.admins[i]) return admin = true;
       }
     }
-
+    */
     switch (command) {
       case 'messages':
         if (admin) {

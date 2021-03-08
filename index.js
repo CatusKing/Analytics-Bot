@@ -82,13 +82,13 @@ client.once('ready', () => {
       name: "tos",
       description: "Sends the current TOS",
     }
-  })
+  });
   client.ws.on('INTERACTION_CREATE', async interaction => {
     const command = interaction.data.name.toLowerCase();
     const args = interaction.data.options;
     let banned = false;
+    const member = new Discord.GuildMember(client, interaction.member, client.guilds.cache.get(interaction.guild_id));
     for(let i = 0; i < config.banlist.length; ++i) {
-      const member = new Discord.GuildMember(client, interaction.member, client.guilds.cache.get(interaction.guild_id));
       if (member.id == config.banlist[i]) {
         console.log(`${member.user.tag} just tried to run a command was denied due to an id ban`);
         return banned = true;

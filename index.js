@@ -24,14 +24,14 @@ client.once('ready', () => {
   rateLimit();
   setInterval(rateLimit, 1000 * config.command_cooldown);
   function status() {
-    let joannaMsgRounded = (Math.floor(joannaMsg / 100)) * 100;
-    let thomasMsgRounded = (Math.floor(thomasMsg / 100)) * 100;
+    let joannaMsgRounded = (Math.floor(joannaMsg / 100)) / 10;
+    let thomasMsgRounded = (Math.floor(thomasMsg / 100)) / 10;
     if (statusCycle == 1) {
       statusCycle = 2;
-      client.user.setActivity(`${joannaMsgRounded} messages from Joanna`);
+      client.user.setActivity(`${joannaMsgRounded}k messages from Joanna`);
     } else if (statusCycle == 2) {
       statusCycle = 3;
-      client.user.setActivity(`${thomasMsgRounded} messages from Thomas`);
+      client.user.setActivity(`${thomasMsgRounded}k messages from Thomas`);
     } else if (statusCycle == 3) {
       statusCycle = 1;
       client.user.setActivity(`${hours} hours in vc`);
@@ -116,13 +116,13 @@ client.once('ready', () => {
           break;
         }
         if (commandRateLimit <= 0 || banned) break;
-        let joannaMsgRounded = (Math.floor(joannaMsg / 100)) * 100;
-        let thomasMsgRounded = (Math.floor(thomasMsg / 100)) * 100;
+        let joannaMsgRounded = (Math.floor(joannaMsg / 100)) / 10;
+        let thomasMsgRounded = (Math.floor(thomasMsg / 100)) / 10;
         client.api.interactions(interaction.id, interaction.token).callback.post({
           data: {
             type: 4,
             data: {
-              content: `Joanna has sent ${joannaMsgRounded} messages and Thomas has sent ${thomasMsgRounded} messages\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`
+              content: `Joanna has sent ${joannaMsgRounded}k messages and Thomas has sent ${thomasMsgRounded}k messages\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`
             }
           }
         });

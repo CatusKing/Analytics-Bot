@@ -105,11 +105,13 @@ client.once('ready', () => {
     switch (command) {
       case 'messages':
         if (admin) {
+          let joannaMsgRounded = (Math.floor(joannaMsg / 100)) / 10;
+          let thomasMsgRounded = (Math.floor(thomasMsg / 100)) / 10;
           client.api.interactions(interaction.id, interaction.token).callback.post({
             data: {
               type: 4,
               data: {
-                content: `Joanna has sent ${joannaMsg} messages and Thomas has sent ${thomasMsg} messages\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`
+                content: `Joanna has sent ${joannaMsgRounded}(${joannaMsg}) messages and Thomas has sent ${thomasMsgRounded}(${thomasMsg}) messages\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`
               }
             }
           });

@@ -111,7 +111,7 @@ client.once('ready', () => {
             data: {
               type: 4,
               data: {
-                content: `Joanna has sent ${joannaMsgRounded}(${joannaMsg}) messages and Thomas has sent ${thomasMsgRounded}(${thomasMsg}) messages\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`
+                content: `Joanna has sent ${joannaMsgRounded}k(${joannaMsg}) messages and Thomas has sent ${thomasMsgRounded}k(${thomasMsg}) messages\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`
               }
             }
           });

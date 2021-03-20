@@ -40,13 +40,21 @@ client.once('ready', () => {
   status();
   setInterval(status, 60000 * config.status_interval)
   function check() {
-    for(let i = 0; i < config.guild_id.length; ++i) {
-      for(let j = 0; j < config.channel_id.length; ++j) {
-        if (!client.guilds.cache.has(config.guild_id[i])) continue;
-        if (!client.guilds.cache.get(config.guild_id[i]).channels.cache.has(config.channel_id[j])) continue;
-        const channel = client.guilds.cache.get(config.guild_id[i]).channels.cache.get(config.channel_id[j]);
+    var guild_id = [];
+    client.guilds.cache.forEach(g => {
+      guild_id.push(g.id);
+    });
+    var channel_id = [];
+    client.channels.cache.forEach(ch => {
+      if (ch.type == 'voice') channel_id.push(ch.id);
+    });
+    for(let i = 0; i < guild_id.length; ++i) {
+      for(let j = 0; j < channel_id.length; ++j) {
+        if (!client.guilds.cache.has(guild_id[i])) continue;
+        if (!client.guilds.cache.get(guild_id[i]).channels.cache.has(channel_id[j])) continue;
+        const channel = client.guilds.cache.get(guild_id[i]).channels.cache.get(channel_id[j]);
         if (channel.members.has('576154421579481090') && channel.members.has('473110112844644372')) {
-          let tempTotalMinutes = total_minutes + config.check_interval;
+          let tempTotalMinutes = total_minutes + check_interval;
           let tempHours = Math.floor(tempTotalMinutes / 60);
           let tempMinutes = tempTotalMinutes % 60;
           var tempData = {
@@ -65,7 +73,7 @@ client.once('ready', () => {
       }
     }
   }
-  setInterval(check, 60000 * config.check_interval);
+  setInterval(check, 60000);
   client.api.applications(client.user.id).commands.post({
     data: {
       name: "messages",
@@ -85,6 +93,12 @@ client.once('ready', () => {
       description: "Sends the current TOS",
     }
   });
+  client.api.applications(client.user.id).commands.post({
+    data: {
+      name: "rl",
+      description: "Sends the current TOS",
+    }
+  });
   client.ws.on('INTERACTION_CREATE', async interaction => {
     const command = interaction.data.name.toLowerCase();
     let banned = false;
@@ -96,73 +110,86 @@ client.once('ready', () => {
         banned = true;
       }
     }
-    if (!banned) {
-      for(let i = 0; i < config.admins.length; ++i) {
-        if (member.id == config.admins[i]) admin = true;
-      }
+    if (banned) {
+      client.api.interactions(interaction.id, interaction.token).callback.post({
+        data: {
+          type: 4,
+          data: {
+            content: `Sorry you have been id banned :/\nIf you think this is a mistake contact CactusKing101#2624`
+          }
+        }
+      });
+      return;
+    }
+    for(let i = 0; i < config.admins.length; ++i) {
+      if (member.id == config.admins[i]) admin = true;
     }
 
-    switch (command) {
-      case 'messages':
-        if (admin) {
-          let joannaMsgRounded = (Math.floor(joannaMsg / 100)) / 10;
-          let thomasMsgRounded = (Math.floor(thomasMsg / 100)) / 10;
-          client.api.interactions(interaction.id, interaction.token).callback.post({
-            data: {
-              type: 4,
-              data: {
-                content: `Joanna has sent ${joannaMsgRounded}k(${joannaMsg}) messages and Thomas has sent ${thomasMsgRounded}k(${thomasMsg}) messages\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`
-              }
-            }
-          });
-          break;
+    let no = false;
+    if (command == 'tos') {
+      client.api.interactions(interaction.id, interaction.token).callback.post({
+        data: {
+          type: 4,
+          data: {
+            content: `Hi so privacy is a thing so we are asking that\n1. You do not use the bot in a way that will get you information about us that isn't already publically avalible.\n2. You dont use the information provided in any way other than observation.\n3. We ask that you don't use this information in a stalker way. ie trying to figure out what we are doing by spamming the command.\n**If you are found breaking the TOS or abusing the bot you will be banned from using the bot.**`
+          }
         }
-        if (commandRateLimit <= 0 || banned) break;
-        let joannaMsgRounded = (Math.floor(joannaMsg / 100)) / 10;
-        let thomasMsgRounded = (Math.floor(thomasMsg / 100)) / 10;
-        client.api.interactions(interaction.id, interaction.token).callback.post({
+      });
+      no = true;
+    } else if (command == 'rl') {
+      client.api.interactions(interaction.id, interaction.token).callback.post({
+        data: {
+          type: 4,
           data: {
-            type: 4,
-            data: {
-              content: `Joanna has sent ${joannaMsgRounded}k messages and Thomas has sent ${thomasMsgRounded}k messages\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`
-            }
+            content: `Hey so this is a quick explanation on how the rate limit is setup. Ok to start right now the ratelimit is at ${commandRateLimit}. Which means only ${commandRateLimit} command(s) can be run right now before it blocks you. This number slowly regnerates over time. Currently it adds 1 every ${config.command_cooldown} seconds. Not to mention this number is set to max at ${config.command_max_rate_limit}. If you have anymore questions contact CactusKing101#2624`
           }
-        });
-        commandRateLimit -= 1;
-        break;
-      case 'vc':
-        if (admin) {
-          client.api.interactions(interaction.id, interaction.token).callback.post({
-            data: {
-              type: 4,
-              data: {
-                content: `Joanna and Thomas have spent ${hours} hours and ${minutes} minutes together in vc\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`
-              }
-            }
-          });
-          break;
         }
-        if (commandRateLimit <= 0 || banned) break;
-        client.api.interactions(interaction.id, interaction.token).callback.post({
+      });
+    }
+    if (no) return;
+    
+    let anotherNo = false;
+    if (commandRateLimit <= 0) {
+      client.api.interactions(interaction.id, interaction.token).callback.post({
+        data: {
+          type: 4,
           data: {
-            type: 4,
-            data: {
-              content: `Joanna and Thomas have spent ${hours} hours together in vc\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`
-            }
+            content: `Hey so funky thing you were just rate limited\nThis rate limit was added so that people cant spam and figure out what we are doing atm\nTo find out more about the reate limit do /rl`
           }
-        });
-        commandRateLimit -= 1;
-        break;
-      case 'tos':
-        client.api.interactions(interaction.id, interaction.token).callback.post({
+        }
+      });
+      anotherNo = true;
+    }
+    if (anotherNo) return;
+
+    if (command == 'messages') {
+      let joannaMsgRounded = (Math.floor(joannaMsg / 100)) / 10;
+      let thomasMsgRounded = (Math.floor(thomasMsg / 100)) / 10;
+      let content = '';
+      if (admin) content = `Joanna has sent ${joannaMsgRounded}k(${joannaMsg}) messages and Thomas has sent ${thomasMsgRounded}k(${thomasMsg}) messages\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`;
+      else content = `Joanna has sent ${joannaMsgRounded}k messages and Thomas has sent ${thomasMsgRounded}k messages\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`;
+      client.api.interactions(interaction.id, interaction.token).callback.post({
+        data: {
+          type: 4,
           data: {
-            type: 4,
-            data: {
-              content: `Hi so privacy is a thing so we are asking that\n1. You do not use the bot in a way that will get you information about us that isn't already publically avalible.\n2. You dont use the information provided in any way other than observation.\n3. We ask that you don't use this information in a stalker way. ie trying to figure out what we are doing by spamming the command.\n**If you are found breaking the TOS or abusing the bot you will be banned from using the bot.**`
-            }
+            content: content
           }
-        });
-        break;
+        }
+      });
+      if (!admin) commandRateLimit -= 1;
+    } else if (command == 'vc') {
+      let content = '';
+      if (admin) content = `Joanna and Thomas have spent ${hours} hours and ${minutes} minutes together in vc\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`;
+      else content = `Joanna and Thomas have spent ${hours} hours together in vc\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`;
+      client.api.interactions(interaction.id, interaction.token).callback.post({
+        data: {
+          type: 4,
+          data: {
+            content: content
+          }
+        }
+      });
+      if (!admin) commandRateLimit -= 1;
     }
   });
 });

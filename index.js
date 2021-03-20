@@ -96,7 +96,7 @@ client.once('ready', () => {
   client.api.applications(client.user.id).commands.post({
     data: {
       name: "rl",
-      description: "Sends the current TOS",
+      description: "Describes how rate limiting works for this bot",
     }
   });
   client.ws.on('INTERACTION_CREATE', async interaction => {
@@ -141,10 +141,11 @@ client.once('ready', () => {
         data: {
           type: 4,
           data: {
-            content: `Hey so this is a quick explanation on how the rate limit is setup. Ok to start right now the ratelimit is at ${commandRateLimit}. Which means only ${commandRateLimit} command(s) can be run right now before it blocks you. This number slowly regnerates over time. Currently it adds 1 every ${config.command_cooldown} seconds. Not to mention this number is set to max at ${config.command_max_rate_limit}. If you have anymore questions contact CactusKing101#2624`
+            content: `Hey so this is a quick explanation on how the rate limit is setup. Ok to start right now the ratelimit is at ${commandRateLimit}. Which means only ${commandRateLimit} command(s) can be run right now before it blocks you. This number slowly regnerates over time. Currently it adds 1 every ${config.command_cooldown} seconds. Not to mention this number is set to max at ${config.command_max_rate_limit}. Also all rate limiting is global. If you have anymore questions contact CactusKing101#2624`
           }
         }
       });
+      no = true;
     }
     if (no) return;
     

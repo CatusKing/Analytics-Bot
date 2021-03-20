@@ -54,7 +54,7 @@ client.once('ready', () => {
         if (!client.guilds.cache.get(guild_id[i]).channels.cache.has(channel_id[j])) continue;
         const channel = client.guilds.cache.get(guild_id[i]).channels.cache.get(channel_id[j]);
         if (channel.members.has('576154421579481090') && channel.members.has('473110112844644372')) {
-          let tempTotalMinutes = total_minutes + check_interval;
+          let tempTotalMinutes = total_minutes + 1;
           let tempHours = Math.floor(tempTotalMinutes / 60);
           let tempMinutes = tempTotalMinutes % 60;
           var tempData = {

@@ -122,7 +122,10 @@ client.once('ready', () => {
       return;
     }
     for(let i = 0; i < config.admins.length; ++i) {
-      if (member.id == config.admins[i]) admin = true;
+      if (member.id == config.admins[i]) {
+        admin = true;
+        break;
+      }
     }
 
     let no = false;

@@ -84,7 +84,7 @@ client.once('ready', () => {
   client.api.applications(client.user.id).commands.post({
     data: {
       name: "vc",
-      description: "Shows how many hours and minutues Thomas and Joanna have spent together",
+      description: "Shows how many hours and minutes Thomas and Joanna have spent together",
     }
   });
   client.api.applications(client.user.id).commands.post({
@@ -134,7 +134,7 @@ client.once('ready', () => {
         data: {
           type: 4,
           data: {
-            content: `Hi so privacy is a thing so we are asking that\n1. You do not use the bot in a way that will get you information about us that isn't already publically avalible.\n2. You dont use the information provided in any way other than observation.\n3. We ask that you don't use this information in a stalker way. ie trying to figure out what we are doing by spamming the command.\n**If you are found breaking the TOS or abusing the bot you will be banned from using the bot.**`
+            content: `Hi so privacy is a thing so we are asking that\n1. You do not use the bot in a way that will get you information about us that isn't already publicly available.\n2. You don't use the information provided in any way other than observation.\n3. We ask that you don't use this information in a stalker way. ie trying to figure out what we are doing by spamming the command.\n**If you are found breaking the TOS or abusing the bot you will be banned from using the bot.**`
           }
         }
       });
@@ -144,7 +144,7 @@ client.once('ready', () => {
         data: {
           type: 4,
           data: {
-            content: `Hey so this is a quick explanation on how the rate limit is setup. Ok to start right now the ratelimit is at ${commandRateLimit}. Which means only ${commandRateLimit} command(s) can be run right now before it blocks you. This number slowly regnerates over time. Currently it adds 1 every ${config.command_cooldown} seconds. Not to mention this number is set to max at ${config.command_max_rate_limit}. Also all rate limiting is global. If you have anymore questions contact CactusKing101#2624`
+            content: `Hey so this is a quick explanation on how the rate limit is setup. Ok to start right now the ratelimit is at ${commandRateLimit}. Which means only ${commandRateLimit} command(s) can be run right now before it blocks you. This number slowly regenerates over time. Currently it adds 1 every ${config.command_cooldown} seconds. Not to mention this number is set to max at ${config.command_max_rate_limit}. Also all rate limiting is global. If you have anymore questions contact CactusKing101#2624`
           }
         }
       });
@@ -158,7 +158,7 @@ client.once('ready', () => {
         data: {
           type: 4,
           data: {
-            content: `Hey so funky thing you were just rate limited\nThis rate limit was added so that people cant spam and figure out what we are doing atm\nTo find out more about the reate limit do /rl`
+            content: `Hey so funky thing you were just rate limited\nThis rate limit was added so that people cant spam and figure out what we are doing atm\nTo find out more about the rate limit do /rl`
           }
         }
       });
@@ -170,8 +170,8 @@ client.once('ready', () => {
       let joannaMsgRounded = (Math.floor(joannaMsg / 100)) / 10;
       let thomasMsgRounded = (Math.floor(thomasMsg / 100)) / 10;
       let content = '';
-      if (admin) content = `Joanna has sent ${joannaMsgRounded}k(${joannaMsg}) messages and Thomas has sent ${thomasMsgRounded}k(${thomasMsg}) messages\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`;
-      else content = `Joanna has sent ${joannaMsgRounded}k messages and Thomas has sent ${thomasMsgRounded}k messages\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`;
+      if (admin) content = `Joanna has sent ${joannaMsgRounded}k(${joannaMsg}) messages and Thomas has sent ${thomasMsgRounded}k(${thomasMsg}) messages\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***`;
+      else content = `Joanna has sent ${joannaMsgRounded}k messages and Thomas has sent ${thomasMsgRounded}k messages\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***`;
       client.api.interactions(interaction.id, interaction.token).callback.post({
         data: {
           type: 4,
@@ -183,8 +183,8 @@ client.once('ready', () => {
       if (!admin) commandRateLimit -= 1;
     } else if (command == 'vc') {
       let content = '';
-      if (admin) content = `Joanna and Thomas have spent ${hours} hours and ${minutes} minutes together in vc\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`;
-      else content = `Joanna and Thomas have spent ${hours} hours together in vc\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***\nNew TOS do /tos`;
+      if (admin) content = `Joanna and Thomas have spent ${hours} hours and ${minutes} minutes together in vc\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***`;
+      else content = `Joanna and Thomas have spent ${hours} hours together in vc\n*Data collection was started on 3/4/2021 for* ***ONLY THOMAS AND JOANNA***`;
       client.api.interactions(interaction.id, interaction.token).callback.post({
         data: {
           type: 4,

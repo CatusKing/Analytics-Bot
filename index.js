@@ -50,10 +50,15 @@ client.once('ready', () => {
     });
     for(let i = 0; i < guild_id.length; ++i) {
       for(let j = 0; j < channel_id.length; ++j) {
-        if (!client.guilds.cache.has(guild_id[i])) continue;
         if (!client.guilds.cache.get(guild_id[i]).channels.cache.has(channel_id[j])) continue;
         const channel = client.guilds.cache.get(guild_id[i]).channels.cache.get(channel_id[j]);
-        if (channel.members.has('576154421579481090') && channel.members.has('473110112844644372')) {
+        var thomas = false;
+        var joanna = false;
+        channel.members.forEach((member) => {
+          if (member.id == '473110112844644372' && !member.voice.deaf) thomas = true;
+          else if (member.id == '576154421579481090' && !member.voice.deaf) joanna = true;
+        });
+        if (thomas && joanna) {
           let tempTotalMinutes = total_minutes + 1;
           let tempHours = Math.floor(tempTotalMinutes / 60);
           let tempMinutes = tempTotalMinutes % 60;
